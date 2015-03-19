@@ -1,0 +1,14 @@
+{
+  "name": "neatstudio/segment",
+  "description": "集成两个分词程序",
+  "authors": [
+    {
+      "name": "gouki",
+      "email": "19129540@qq.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-0": {"Segment": "lib/"}
+  }
+}
