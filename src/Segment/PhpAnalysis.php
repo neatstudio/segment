@@ -35,21 +35,21 @@ class PhpAnalysis
     //尝试合并单字
     public $unitWord = true;
     //初始化类时直接加载词典
-    public static $loadInit = true;
+    public static $loadInit = false;
     //使用热门词优先模式进行消岐
     public $differFreq = false;
     //被转换为unicode的源字符串
     private $sourceString = '';
     //附加词典
-    public $addonDic     = [ ];
+    public $addonDic = [ ];
     public $addonDicFile = 'dict/words_addons.dic';
     //主词典
-    public $dicStr  = '';
+    public $dicStr = '';
     public $mainDic = [ ];
     /** @var resource */
-    public $mainDicHand  = false;
+    public $mainDicHand = false;
     public $mainDicInfos = [ ];
-    public $mainDicFile  = 'dict/base_dic_full.dic';
+    public $mainDicFile = 'dict/base_dic_full.dic';
     //是否直接载入词典（选是载入速度较慢，但解析较快；选否载入较快，但解析较慢，需要时才会载入特定的词条）
     private $isLoadAll = false;
     //主词典词语最大长度 x / 2
@@ -61,7 +61,7 @@ class PhpAnalysis
     //是否已经载入词典
     public $isLoadDic = false;
     //系统识别或合并的新词
-    public $newWords     = [ ];
+    public $newWords = [ ];
     public $foundWordStr = '';
     //词库载入时间
     public $loadTime = 0;
@@ -892,7 +892,7 @@ class PhpAnalysis
             }
             $okstr .= ( $okstr == '' ? $k : ',' . $k );
             $n++;
-            if ($n > $num) {
+            if ($n >= $num) {
                 break;
             }
         }
@@ -1000,5 +1000,3 @@ class PhpAnalysis
         return true;
     }
 }
-
-?> 

@@ -90,14 +90,14 @@ class PhpScws
     public $_xd;        // xdb dict handler
     public $_rs;        // ruleset resource
     public $_rd;        // ruleset data
-    public $_cs   = '';    // charset
+    public $_cs = '';    // charset
     public $_ztab;        // zi len table
     public $_mode = 0;    // scws mode
     public $_txt;        // text string
     public $_res;
     public $_zis;        // z if used?(duality)
-    public $_off  = 0;
-    public $_len  = 0;
+    public $_off = 0;
+    public $_len = 0;
     public $_wend = 0;
     public $_wmap;
     public $_zmap;
@@ -112,7 +112,10 @@ class PhpScws
 
     // FOR PHP5
     //function __construct() { $this->PSCWS4(); }
-    function __destruct(){ $this->close(); }
+    function __destruct()
+    {
+        $this->close();
+    }
 
     // 设置字符集(ztab)
     function set_charset( $charset = 'utf8' )
@@ -140,8 +143,11 @@ class PhpScws
     }
 
     // 设置词典
-    function set_dict( $fpath )
+    function set_dict( $fpath = '' )
     {
+        if ( !$fpath) {
+            $fpath = __DIR__ . "/scws/dict.utf8.xdb";
+        }
         /** @var XdbR $xdb */
         $xdb = new XdbR();
         if ( !$xdb->Open( $fpath )) {
@@ -152,13 +158,16 @@ class PhpScws
     }
 
     // 设置规则集
-    function set_rule( $fpath )
+    function set_rule( $fpath = '' )
     {
+        if ( !$fpath) {
+            $fpath = __DIR__ . "/scws/rules.utf8.ini";
+        }
         $this->_rule_load( $fpath );
     }
 
     // 设置忽略符号与无用字符
-    function set_ignore( $yes )
+    function set_ignore( $yes = true )
     {
         if ($yes == true) {
             $this->_mode |= PSCWS4_IGN_SYMBOL;
@@ -480,6 +489,9 @@ class PhpScws
                         $tmp = strtolower( trim( $tmp ) );
                         if ( !isset( $this->_rs[$tmp] )) {
                             continue;
+                        }
+                        if ( !isset( $this->_rs[$tmp]['bit'] )) {
+                            $this->_rs[$tmp]['bit'] = 0;
                         }
                         $clude |= $this->_rs[$tmp]['bit'];
                     }
@@ -982,7 +994,13 @@ class PhpScws
                 if ( !$r1) {
                     continue;
                 }
+                if ( !isset( $r1['zmin'] )) {
+                    $r1['zmin'] = 0;
+                }
                 $clen = ( $r1['zmin'] > 0 ? $r1['zmin'] : 1 );
+                if ( !isset( $r1['flag'] )) {
+                    $r1['flag'] = 0;
+                }
                 if (( $r1['flag'] & PSCWS4_ZRULE_PREFIX ) && ( $i < ( $zlen - $clen ) )) {
                     // prefix, check after (zmin~zmax)
                     // 先检查 zmin 字内是否全部符合要求, 再在 zmax 范围内取得符合要求的字
